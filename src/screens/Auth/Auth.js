@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from "react";
 import {
   View,
   StyleSheet,
@@ -6,28 +6,28 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   Keyboard,
-} from 'react-native';
-import {connect} from 'react-redux';
+} from "react-native";
+import { connect } from "react-redux";
 
-import startMainTabs from '../MainTabs/startMainTabs';
-import DefaultInput from '../../components/UI/DefaultInput/DefaultInput';
-import HeadingText from '../../components/UI/HeadingText/HeadingText';
-import MainText from '../../components/UI/MainText/MainText';
-import ButtonWithBackground from '../../components/UI/ButtonWithBackground/ButtonWithBackground';
-import backgroundImage from '../../assets/background.jpg.jpg';
-import validate from '../../utility/validation';
-import {tryAuth} from '../../store/actions/index';
+import startMainTabs from "../MainTabs/startMainTabs";
+import DefaultInput from "../../components/UI/DefaultInput/DefaultInput";
+import HeadingText from "../../components/UI/HeadingText/HeadingText";
+import MainText from "../../components/UI/MainText/MainText";
+import ButtonWithBackground from "../../components/UI/ButtonWithBackground/ButtonWithBackground";
+import backgroundImage from "../../assets/background.jpg.jpg";
+import validate from "../../utility/validation";
+import { tryAuth } from "../../store/actions/index";
 
 class AuthScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       viewMode:
-        Dimensions.get('window').height > 500 ? 'portrait' : 'landscape',
-      authMode: 'login',
+        Dimensions.get("window").height > 500 ? "portrait" : "landscape",
+      authMode: "login",
       controls: {
         email: {
-          value: '',
+          value: "",
           valid: false,
           validationRules: {
             isEmail: true,
@@ -35,7 +35,7 @@ class AuthScreen extends Component {
           touched: false,
         },
         password: {
-          value: '',
+          value: "",
           valid: false,
           validationRules: {
             minLength: 6,
@@ -43,10 +43,10 @@ class AuthScreen extends Component {
           touched: false,
         },
         confirmPassword: {
-          value: '',
+          value: "",
           valid: false,
           validationRules: {
-            equalTo: 'password',
+            equalTo: "password",
           },
           touched: false,
         },
@@ -55,32 +55,32 @@ class AuthScreen extends Component {
   }
 
   componentDidMount() {
-    Dimensions.addEventListener('change', this.updatStyles);
+    Dimensions.addEventListener("change", this.updatStyles);
   }
 
   componentWillUnmount() {
-    Dimensions.removeEventListener('change', this.updatStyles);
+    Dimensions.removeEventListener("change", this.updatStyles);
   }
 
   switchAuthModeHandler = () => {
     this.setState((prevState) => ({
-      authMode: prevState.authMode === 'login' ? 'signup' : 'login',
+      authMode: prevState.authMode === "login" ? "signup" : "login",
     }));
   };
 
   updatStyles = (dims) => {
     this.setState({
-      viewMode: dims.window.height > 500 ? 'portrait' : 'landscape',
+      viewMode: dims.window.height > 500 ? "portrait" : "landscape",
     });
   };
 
   loginHandler = () => {
     Keyboard.dismiss();
-    // const authData = {
-    //   email: this.state.controls.email.value,
-    //   password: this.state.controls.password.value,
-    // };
-    // this.props.onLogin(authData);
+    const authData = {
+      email: this.state.controls.email.value,
+      password: this.state.controls.password.value,
+    };
+    this.props.onLogin(authData);
     startMainTabs();
   };
 
@@ -94,7 +94,7 @@ class AuthScreen extends Component {
         equalTo: eqalValue,
       };
     }
-    if (key === 'password') {
+    if (key === "password") {
       connectedValue = {
         ...connectedValue,
         equalTo: val,
@@ -107,11 +107,11 @@ class AuthScreen extends Component {
           confirmPassword: {
             ...prevState.controls.confirmPassword,
             valid:
-              key === 'password'
+              key === "password"
                 ? validate(
                     prevState.controls.confirmPassword.value,
                     prevState.controls.confirmPassword.validationRules,
-                    connectedValue,
+                    connectedValue
                   )
                 : prevState.controls.confirmPassword.valid,
           },
@@ -121,7 +121,7 @@ class AuthScreen extends Component {
             valid: validate(
               val,
               prevState.controls[key].validationRules,
-              connectedValue,
+              connectedValue
             ),
             touched: true,
           },
@@ -134,25 +134,26 @@ class AuthScreen extends Component {
     const {
       viewMode,
       authMode,
-      controls: {email, password, confirmPassword},
+      controls: { email, password, confirmPassword },
     } = this.state;
     let headingText = null;
     let confirmPasswordControl = null;
 
-    if (authMode === 'signup') {
+    if (authMode === "signup") {
       confirmPasswordControl = (
         <View
           style={
-            viewMode === 'portrait'
+            viewMode === "portrait"
               ? styles.portraitPasswordWrapper
               : styles.landscapePasswordWrapper
-          }>
+          }
+        >
           <DefaultInput
             placeholder="Confirm Password"
             style={styles.input}
             value={confirmPassword.value}
             onChangeText={(val) =>
-              this.updateInputState('confirmPassword', val)
+              this.updateInputState("confirmPassword", val)
             }
             valid={confirmPassword.valid}
             touched={confirmPassword.touched}
@@ -163,7 +164,7 @@ class AuthScreen extends Component {
       );
     }
 
-    if (Dimensions.get('window').height > 500) {
+    if (Dimensions.get("window").height > 500) {
       headingText = (
         <MainText>
           <HeadingText>Please Log In</HeadingText>
@@ -175,20 +176,22 @@ class AuthScreen extends Component {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ImageBackground
           source={backgroundImage}
-          style={styles.backgroundImage}>
+          style={styles.backgroundImage}
+        >
           <View style={styles.container}>
             {headingText}
             <ButtonWithBackground
               color="#29aaf4"
-              onPress={this.switchAuthModeHandler}>
-              Switch to {authMode === 'login' ? 'Sign Up' : 'Login'}
+              onPress={this.switchAuthModeHandler}
+            >
+              Switch to {authMode === "login" ? "Sign Up" : "Login"}
             </ButtonWithBackground>
             <View style={styles.inputContainer}>
               <DefaultInput
                 placeholder="Your E-Mail Address"
                 style={styles.input}
                 value={email.value}
-                onChangeText={(val) => this.updateInputState('email', val)}
+                onChangeText={(val) => this.updateInputState("email", val)}
                 valid={email.valid}
                 touched={email.touched}
                 autoCapitalize="none"
@@ -197,22 +200,24 @@ class AuthScreen extends Component {
               />
               <View
                 style={
-                  viewMode === 'portrait'
+                  viewMode === "portrait"
                     ? styles.portraitPasswordContainer
                     : styles.landScapePasswordContainer
-                }>
+                }
+              >
                 <View
                   style={
-                    viewMode === 'portrait' || authMode === 'login'
+                    viewMode === "portrait" || authMode === "login"
                       ? styles.portraitPasswordWrapper
                       : styles.landscapePasswordWrapper
-                  }>
+                  }
+                >
                   <DefaultInput
                     placeholder="Password"
                     style={styles.input}
                     value={password.value}
                     onChangeText={(val) =>
-                      this.updateInputState('password', val)
+                      this.updateInputState("password", val)
                     }
                     valid={password.valid}
                     touched={password.touched}
@@ -226,11 +231,11 @@ class AuthScreen extends Component {
             <ButtonWithBackground
               color="#29aaf4"
               onPress={this.loginHandler}
-              // disabled={
-              //   !email.valid ||
-              //   !password.valid ||
-              //   (!confirmPassword.valid && authMode === 'signup')
-              // }
+              disabled={
+                !email.valid ||
+                !password.valid ||
+                (!confirmPassword.valid && authMode === "signup")
+              }
             >
               Log In
             </ButtonWithBackground>
@@ -244,37 +249,37 @@ class AuthScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   backgroundImage: {
-    width: '100%',
+    width: "100%",
     flex: 1,
   },
   textHeading: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   inputContainer: {
-    width: '85%',
+    width: "85%",
   },
   input: {
-    backgroundColor: '#eee',
-    borderColor: '#bbb',
+    backgroundColor: "#eee",
+    borderColor: "#bbb",
   },
   landScapePasswordContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   portraitPasswordContainer: {
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
+    flexDirection: "column",
+    justifyContent: "flex-start",
   },
   landscapePasswordWrapper: {
-    width: '45%',
+    width: "45%",
   },
   portraitPasswordWrapper: {
-    width: '100%',
+    width: "100%",
   },
 });
 
