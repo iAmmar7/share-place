@@ -1,55 +1,52 @@
-import React from "react";
-import { Navigation } from "react-native-navigation";
-import { Provider } from "react-redux";
+import React from 'react';
+import { Navigation } from 'react-native-navigation';
+import { Provider } from 'react-redux';
 
-import AuthScreen from "./src/screens/Auth/Auth";
-import SharePlaceScreen from "./src/screens/SharePlace/SharePlace";
-import FindPlaceScreen from "./src/screens/FindPlace/FindPlace";
-import PlaceDetailScreen from "./src/screens/PlaceDetail/PlaceDetail";
-import SideDrawerScreen from "./src/screens/SideDrawer/SideDrawer";
-import configureStore from "./src/store/configureStore";
+import AuthScreen from './src/screens/Auth/Auth';
+import SharePlaceScreen from './src/screens/SharePlace/SharePlace';
+import FindPlaceScreen from './src/screens/FindPlace/FindPlace';
+import PlaceDetailScreen from './src/screens/PlaceDetail/PlaceDetail';
+import SideDrawerScreen from './src/screens/SideDrawer/SideDrawer';
+import configureStore from './src/store/configureStore';
 
 // Register Screen
 Navigation.registerComponent(
-  "SharePlaces.AuthScreen",
+  'SharePlaces.AuthScreen',
   () => (props) => (
     <Provider store={configureStore}>
       <AuthScreen {...props} />
     </Provider>
   ),
-  () => AuthScreen
+  () => AuthScreen,
 );
 Navigation.registerComponent(
-  "SharePlaces.SharePlaceScreen",
+  'SharePlaces.SharePlaceScreen',
   () => (props) => (
     <Provider store={configureStore}>
       <SharePlaceScreen {...props} />
     </Provider>
   ),
-  () => SharePlaceScreen
+  () => SharePlaceScreen,
 );
 Navigation.registerComponent(
-  "SharePlaces.FindPlaceScreen",
+  'SharePlaces.FindPlaceScreen',
   () => (props) => (
     <Provider store={configureStore}>
       <FindPlaceScreen {...props} />
     </Provider>
   ),
-  () => FindPlaceScreen
+  () => FindPlaceScreen,
 );
 Navigation.registerComponent(
-  "SharePlaces.PlaceDetailScreen",
+  'SharePlaces.PlaceDetailScreen',
   () => (props) => (
     <Provider store={configureStore}>
       <PlaceDetailScreen {...props} />
     </Provider>
   ),
-  () => PlaceDetailScreen
+  () => PlaceDetailScreen,
 );
-Navigation.registerComponent(
-  "SharePlaces.SideDrawerScreen",
-  () => SideDrawerScreen
-);
+Navigation.registerComponent('SharePlaces.SideDrawerScreen', () => SideDrawerScreen);
 
 // Start an App
 Navigation.events().registerAppLaunchedListener(() => {
@@ -59,16 +56,18 @@ Navigation.events().registerAppLaunchedListener(() => {
         children: [
           {
             component: {
-              name: "SharePlaces.AuthScreen",
-              text: "Login",
+              name: 'SharePlaces.AuthScreen',
+              text: 'Login',
             },
           },
         ],
         options: {
           topBar: {
+            visible: false,
             title: {
-              text: "Login",
-              alignment: "center",
+              text: 'Login',
+              alignment: 'center',
+              borderColor: 'red',
             },
           },
         },
