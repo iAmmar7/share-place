@@ -74,12 +74,12 @@ class AuthScreen extends Component {
   };
 
   loginHandler = () => {
-    Keyboard.dismiss();
-    const authData = {
-      email: this.state.controls.email.value,
-      password: this.state.controls.password.value,
-    };
-    this.props.onLogin(authData);
+    // Keyboard.dismiss();
+    // const authData = {
+    //   email: this.state.controls.email.value,
+    //   password: this.state.controls.password.value,
+    // };
+    // this.props.onLogin(authData);
     startMainTabs();
   };
 
@@ -213,9 +213,10 @@ class AuthScreen extends Component {
             <ButtonWithBackground
               color='#29aaf4'
               onPress={this.loginHandler}
-              disabled={
-                !email.valid || !password.valid || (!confirmPassword.valid && authMode === 'signup')
-              }>
+              // disabled={
+              //   !email.valid || !password.valid || (!confirmPassword.valid && authMode === 'signup')
+              // }
+            >
               Log In
             </ButtonWithBackground>
           </View>
