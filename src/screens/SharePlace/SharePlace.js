@@ -14,7 +14,20 @@ class SharePlaceScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      placeName: '',
+      controls: {
+        placeName: {
+          value: "",
+          valid: false,
+          touched: false,
+          validationRules: {
+            notEmpty: true
+          }
+        },
+        location: {
+          value: null,
+          valid: false
+        }
+      }
     };
     Navigation.events().bindComponent(this);
   }
@@ -30,6 +43,20 @@ class SharePlaceScreen extends Component {
       });
     }
   }
+
+    locationPickedHandler = location => {
+    this.setState(prevState => {
+      return {
+        controls: {
+          ...prevState.controls,
+          location: {
+            value: location,
+            valid: true
+          }
+        }
+      };
+    });
+  };
 
   placeAddedHandler = () => {
     if (this.state.placeName.trim() !== '') {
@@ -51,7 +78,7 @@ class SharePlaceScreen extends Component {
             <HeadingText>Share a place with us!</HeadingText>
           </MainText>
           {/* <PickImage /> */}
-          <PickLocation />
+          <PickLocation onLocationPick={this.locationPickedHandler} />
           <PlaceInput
             placeName={this.state.placeName}
             onChangeText={this.placeNameChangedHandler}
