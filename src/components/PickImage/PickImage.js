@@ -8,7 +8,16 @@ class PickImage extends Component {
   };
 
   pickImageHandler = () => {
-    ImagePicker.showImagePicker({ title: 'Pick an Image' }, (res) => {
+    const options = {
+      title: 'Pick an Image',
+      customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+
+    ImagePicker.showImagePicker(options, (res) => {
       if (res.didCancel) {
         console.log('User cancelled!');
       } else if (res.error) {
