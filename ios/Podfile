@@ -58,6 +58,8 @@ target 'SharePlaces' do
 
   pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
 
+  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
+
   target 'SharePlacesTests' do
     inherit! :complete
     # Pods for testing

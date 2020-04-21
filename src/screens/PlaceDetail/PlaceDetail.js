@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
+import { Navigation } from 'react-native-navigation';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import { deletePlace } from '../../store/actions/index';
@@ -39,7 +40,7 @@ class PlaceDetail extends Component {
 
   placeDeletedHandler = () => {
     this.props.onDeletePlace(this.props.selectedPlace.key);
-    this.props.navigator.pop();
+    Navigation.pop(this.props.componentId);
   };
 
   render() {

@@ -7,7 +7,7 @@ import { addPlace } from '../../store/actions/index';
 import PlaceInput from '../../components/PlaceInput/PlaceInput';
 import MainText from '../../components/UI/MainText/MainText';
 import HeadingText from '../../components/UI/HeadingText/HeadingText';
-// import PickImage from "../../components/PickImage/PickImage";
+import PickImage from '../../components/PickImage/PickImage';
 import PickLocation from '../../components/PickLocation/PickLocation';
 import validate from '../../utility/validation';
 
@@ -28,6 +28,10 @@ class SharePlaceScreen extends Component {
           value: null,
           valid: false,
         },
+        image: {
+          value: null,
+          valid: false,
+        },
       },
     };
     Navigation.events().bindComponent(this);
@@ -44,6 +48,20 @@ class SharePlaceScreen extends Component {
       });
     }
   }
+
+  imagePickedHandler = (image) => {
+    this.setState((prevState) => {
+      return {
+        controls: {
+          ...prevState.controls,
+          image: {
+            value: image,
+            valid: true,
+          },
+        },
+      };
+    });
+  };
 
   locationPickedHandler = (location) => {
     this.setState((prevState) => {
@@ -76,7 +94,11 @@ class SharePlaceScreen extends Component {
   };
 
   placeAddedHandler = () => {
-    this.props.onAddPlace(this.state.controls.placeName.value, this.state.controls.location.value);
+    this.props.onAddPlace(
+      this.state.controls.placeName.value,
+      this.state.controls.location.value,
+      this.state.controls.image.value,
+    );
   };
 
   render() {
@@ -86,7 +108,7 @@ class SharePlaceScreen extends Component {
           <MainText>
             <HeadingText>Share a place with us!</HeadingText>
           </MainText>
-          {/* <PickImage /> */}
+          <PickImage onImagePicked={this.imagePickedHandler} />
           <PickLocation onLocationPick={this.locationPickedHandler} />
           <PlaceInput
             placeData={this.state.controls.placeName}
@@ -96,7 +118,11 @@ class SharePlaceScreen extends Component {
             <Button
               title='Share the Place!'
               onPress={this.placeAddedHandler}
-              disabled={!this.state.controls.placeName.valid || !this.state.controls.location.valid}
+              disabled={
+                !this.state.controls.placeName.valid ||
+                !this.state.controls.location.valid ||
+                !this.state.controls.image.valid
+              }
             />
           </View>
         </View>
@@ -128,7 +154,7 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAddPlace: (placeName, location) => dispatch(addPlace(placeName, location)),
+    onAddPlace: (placeName, location, image) => dispatch(addPlace(placeName, location, image)),
   };
 };
 
