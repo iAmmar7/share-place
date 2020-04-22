@@ -1,13 +1,11 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { View, Image, Button, StyleSheet } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 
-class PickImage extends Component {
-  state = {
-    pickedImaged: null,
-  };
+function PickImage(props) {
+  const [pickedImage, setPickedImage] = useState(null);
 
-  pickImageHandler = () => {
+  const pickImageHandler = () => {
     const options = {
       title: 'Pick an Image',
       customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
@@ -23,26 +21,22 @@ class PickImage extends Component {
       } else if (res.error) {
         console.log('Error', res.error);
       } else {
-        this.setState({
-          pickedImaged: { uri: res.uri },
-        });
-        this.props.onImagePicked({ uri: res.uri, base64: res.data });
+        setPickedImage({ uri: res.uri });
+        props.onImagePicked({ uri: res.uri, base64: res.data });
       }
     });
   };
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <View style={styles.placeholder}>
-          <Image source={this.state.pickedImaged} style={styles.previewImage} />
-        </View>
-        <View style={styles.button}>
-          <Button title='Pick Image' onPress={this.pickImageHandler} />
-        </View>
+  return (
+    <View style={styles.container}>
+      <View style={styles.placeholder}>
+        <Image source={pickedImage} style={styles.previewImage} />
       </View>
-    );
-  }
+      <View style={styles.button}>
+        <Button title='Pick Image' onPress={pickImageHandler} />
+      </View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
