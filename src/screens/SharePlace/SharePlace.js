@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Button, StyleSheet, ScrollView, Image } from 'react-native';
+import { View, Button, StyleSheet, ScrollView, Image, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { Navigation } from 'react-native-navigation';
 
@@ -94,7 +94,7 @@ class SharePlaceScreen extends Component {
   };
 
   placeAddedHandler = () => {
-    this.props.onAddPlace(
+    this.props.addPlace(
       this.state.controls.placeName.value,
       this.state.controls.location.value,
       this.state.controls.image.value,
@@ -115,15 +115,19 @@ class SharePlaceScreen extends Component {
             onChangeText={this.placeNameChangedHandler}
           />
           <View style={styles.button}>
-            <Button
-              title='Share the Place!'
-              onPress={this.placeAddedHandler}
-              disabled={
-                !this.state.controls.placeName.valid ||
-                !this.state.controls.location.valid ||
-                !this.state.controls.image.valid
-              }
-            />
+            {this.props.isLoading ? (
+              <ActivityIndicator size='large' color='orange' />
+            ) : (
+              <Button
+                title='Share the Place!'
+                onPress={this.placeAddedHandler}
+                disabled={
+                  !this.state.controls.placeName.valid ||
+                  !this.state.controls.location.valid ||
+                  !this.state.controls.image.valid
+                }
+              />
+            )}
           </View>
         </View>
       </ScrollView>
@@ -152,10 +156,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onAddPlace: (placeName, location, image) => dispatch(addPlace(placeName, location, image)),
-  };
-};
+const mapStateToProps = (state) => ({
+  isLoading: state.ui.isLoading,
+});
 
-export default connect(null, mapDispatchToProps)(SharePlaceScreen);
+export default connect(mapStateToProps, { addPlace })(SharePlaceScreen);

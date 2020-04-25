@@ -1,15 +1,10 @@
-import React, { Component } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Animated,
-} from "react-native";
-import { connect } from "react-redux";
-import { Navigation } from "react-native-navigation";
+import React, { Component } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
+import { connect } from 'react-redux';
+import { Navigation } from 'react-native-navigation';
 
-import PlaceList from "../../components/PlaceList/PlaceList";
+import PlaceList from '../../components/PlaceList/PlaceList';
+import { getPlaces } from '../../store/actions/index';
 
 class FindPlaceScreen extends Component {
   constructor(props) {
@@ -23,8 +18,12 @@ class FindPlaceScreen extends Component {
     Navigation.events().bindComponent(this);
   }
 
+  componentDidMount() {
+    this.props.getPlaces();
+  }
+
   navigationButtonPressed(event) {
-    if (event.buttonId === "leftDrawerToggle") {
+    if (event.buttonId === 'leftDrawerToggle') {
       Navigation.mergeOptions(this.props.componentId, {
         sideMenu: {
           left: {
@@ -40,14 +39,14 @@ class FindPlaceScreen extends Component {
 
     Navigation.push(this.props.componentId, {
       component: {
-        name: "SharePlaces.PlaceDetailScreen",
+        name: 'SharePlaces.PlaceDetailScreen',
         passProps: {
           selectedPlace: selPlace,
         },
         options: {
           topBar: {
             title: {
-              text: "Place Detail",
+              text: 'Place Detail',
             },
             leftButtons: [],
           },
@@ -91,8 +90,7 @@ class FindPlaceScreen extends Component {
               }),
             },
           ],
-        }}
-      >
+        }}>
         <TouchableOpacity onPress={this.placesSearchHandler}>
           <View style={styles.searchButton}>
             <Text style={styles.searchButtonText}>Find Places</Text>
@@ -106,38 +104,30 @@ class FindPlaceScreen extends Component {
         <Animated.View
           style={{
             opacity: placesAnim,
-          }}
-        >
-          <PlaceList
-            places={this.props.places}
-            onItemSelected={this.itemSelectedHandler}
-          />
+          }}>
+          <PlaceList places={this.props.places} onItemSelected={this.itemSelectedHandler} />
         </Animated.View>
       );
     }
-    return (
-      <View style={placesLoaded ? null : styles.buttonContainer}>
-        {content}
-      </View>
-    );
+    return <View style={placesLoaded ? null : styles.buttonContainer}>{content}</View>;
   }
 }
 
 const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   searchButton: {
-    borderColor: "orange",
+    borderColor: 'orange',
     borderWidth: 3,
     borderRadius: 50,
     padding: 20,
   },
   searchButtonText: {
-    color: "orange",
-    fontWeight: "bold",
+    color: 'orange',
+    fontWeight: 'bold',
     fontSize: 26,
   },
 });
@@ -148,4 +138,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(FindPlaceScreen);
+export default connect(mapStateToProps, { getPlaces })(FindPlaceScreen);
