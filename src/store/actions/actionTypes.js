@@ -5,3 +5,5 @@ export const TRY_AUTH = 'TRY_AUTH';
 
 export const START_LOADING = 'START_LOADING';
 export const STOP_LOADING = 'STOP_LOADING';
+
+export const AUTH_SET_TOKEN = 'AUTH_SET_TOKEN';

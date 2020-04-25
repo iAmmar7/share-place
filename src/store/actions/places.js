@@ -1,5 +1,5 @@
 import { SET_PLACES, REMOVE_PLACE } from './actionTypes';
-import { startLoading, stopLoading } from './index';
+import { startLoading, stopLoading, authGetToken } from './index';
 
 export const addPlace = (placeName, location, image) => (dispatch) => {
   dispatch(startLoading());
@@ -9,11 +9,6 @@ export const addPlace = (placeName, location, image) => (dispatch) => {
       image: image.base64,
     }),
   })
-    .catch((err) => {
-      console.log(err);
-      alert('Something went wrong, please try again!');
-      dispatch(stopLoading());
-    })
     .then((res) => res.json())
     .then((parsedRes) => {
       console.log('Image stored', parsedRes);
@@ -36,14 +31,21 @@ export const addPlace = (placeName, location, image) => (dispatch) => {
     .then((parsedRes) => {
       console.log('Data stored', parsedRes);
       dispatch(stopLoading());
+    })
+    .catch((err) => {
+      console.log(err);
+      alert('Something went wrong, please try again!');
+      dispatch(stopLoading());
     });
 };
 
 export const getPlaces = () => (dispatch) => {
-  fetch('https://rn-course-v2.firebaseio.com/places.json')
-    .catch((err) => {
-      console.log(err);
-      alert('Something went wrong, sorry :/');
+  dispatch(authGetToken())
+    .then((token) => {
+      return fetch('https://rn-course-v2.firebaseio.com/places.json?auth=' + token);
+    })
+    .catch(() => {
+      alert('No valid token found!');
     })
     .then((res) => res.json())
     .then((parsedRes) => {
@@ -57,8 +59,14 @@ export const getPlaces = () => (dispatch) => {
           key,
         });
       }
-
+      if (parsedRes.error) {
+        alert(parsedRes.error);
+      }
       dispatch(setPlaces(places));
+    })
+    .catch((err) => {
+      console.log(err);
+      alert('Something went wrong, sorry :/');
     });
 };
 
@@ -70,17 +78,23 @@ export const setPlaces = (places) => {
 };
 
 export const deletePlace = (key) => (dispatch) => {
-  dispatch(removePlace(key));
-  fetch('https://rn-course-v2.firebaseio.com/places/' + key + '.json', {
-    method: 'DELETE',
-  })
-    .catch((err) => {
-      alert('Something went wrong, sorry :/');
-      console.log(err);
+  dispatch(authGetToken())
+    .catch(() => {
+      alert('No valid token found!');
+    })
+    .then((token) => {
+      dispatch(removePlace(key));
+      return fetch('https://rn-course-v2.firebaseio.com/places/' + key + '.json?auth=' + token, {
+        method: 'DELETE',
+      });
     })
     .then((res) => res.json())
     .then((parsedRes) => {
-      console.log('Done!');
+      console.log('Deleted successfully!');
+    })
+    .catch((err) => {
+      alert('Something went wrong, sorry :/');
+      console.log(err);
     });
 };
 

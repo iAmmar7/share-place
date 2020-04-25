@@ -3,10 +3,12 @@ import thunk from 'redux-thunk';
 
 import placesReducer from './reducers/places';
 import uiReducer from './reducers/ui';
+import authReducer from './reducers/auth';
 
 const rootReducer = combineReducers({
   places: placesReducer,
   ui: uiReducer,
+  auth: authReducer,
 });
 
 // Setting up redux dev tool
