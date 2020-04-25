@@ -3,12 +3,23 @@ import { startLoading, stopLoading, authGetToken } from './index';
 
 export const addPlace = (placeName, location, image) => (dispatch) => {
   dispatch(startLoading());
-  fetch('https://us-central1-rn-course-v2.cloudfunctions.net/storeImage', {
-    method: 'POST',
-    body: JSON.stringify({
-      image: image.base64,
-    }),
-  })
+  dispatch(authGetToken())
+    .catch(() => {
+      alert('No valid token found!');
+    })
+    .then((token) => {
+      return fetch('https://us-central1-rn-course-v2.cloudfunctions.net/storeImage', {
+        method: 'POST',
+        body: JSON.stringify({
+          image: image.base64,
+        }),
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      alert('Something went wrong, please try again!');
+      dispatch(stopLoading());
+    })
     .then((res) => res.json())
     .then((parsedRes) => {
       console.log('Image stored', parsedRes);
@@ -21,11 +32,6 @@ export const addPlace = (placeName, location, image) => (dispatch) => {
         method: 'POST',
         body: JSON.stringify(placeData),
       });
-    })
-    .catch((err) => {
-      console.log(err);
-      alert('Something went wrong, please try again!');
-      dispatch(stopLoading());
     })
     .then((res) => res.json())
     .then((parsedRes) => {
