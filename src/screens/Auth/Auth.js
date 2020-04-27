@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { connect } from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import DefaultInput from '../../components/UI/DefaultInput/DefaultInput';
 import HeadingText from '../../components/UI/HeadingText/HeadingText';
@@ -16,7 +17,7 @@ import MainText from '../../components/UI/MainText/MainText';
 import ButtonWithBackground from '../../components/UI/ButtonWithBackground/ButtonWithBackground';
 import backgroundImage from '../../assets/background.jpg';
 import validate from '../../utility/validation';
-import { tryAuth } from '../../store/actions/index';
+import { tryAuth, authAutoSignIn } from '../../store/actions/index';
 
 class AuthScreen extends Component {
   constructor(props) {
@@ -54,8 +55,20 @@ class AuthScreen extends Component {
   }
 
   componentDidMount() {
+    this.props.authAutoSignIn();
+    // this.removeToken();
     Dimensions.addEventListener('change', this.updatStyles);
   }
+
+  removeToken = async () => {
+    try {
+      await AsyncStorage.removeItem('sp:auth:token');
+      console.log('token deleted!');
+    } catch (error) {
+      // Error retrieving data
+      console.log(error.message);
+    }
+  };
 
   componentWillUnmount() {
     Dimensions.removeEventListener('change', this.updatStyles);
@@ -284,4 +297,4 @@ const mapStateToProps = (state) => ({
   isLoading: state.ui.isLoading,
 });
 
-export default connect(mapStateToProps, { tryAuth })(AuthScreen);
+export default connect(mapStateToProps, { tryAuth, authAutoSignIn })(AuthScreen);

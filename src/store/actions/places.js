@@ -1,15 +1,21 @@
 import { SET_PLACES, REMOVE_PLACE } from './actionTypes';
 import { startLoading, stopLoading, authGetToken } from './index';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export const addPlace = (placeName, location, image) => (dispatch) => {
+  let authToken;
   dispatch(startLoading());
   dispatch(authGetToken())
     .catch(() => {
       alert('No valid token found!');
     })
     .then((token) => {
+      authToken = token;
       return fetch('https://us-central1-rn-course-v2.cloudfunctions.net/storeImage', {
         method: 'POST',
+        headers: {
+          Authorization: 'Bearer ' + authToken,
+        },
         body: JSON.stringify({
           image: image.base64,
         }),
@@ -28,7 +34,7 @@ export const addPlace = (placeName, location, image) => (dispatch) => {
         location,
         image: parsedRes.imageUrl,
       };
-      return fetch('https://rn-course-v2.firebaseio.com/places.json', {
+      return fetch('https://rn-course-v2.firebaseio.com/places.json?auth=' + authToken, {
         method: 'POST',
         body: JSON.stringify(placeData),
       });
@@ -45,7 +51,12 @@ export const addPlace = (placeName, location, image) => (dispatch) => {
     });
 };
 
-export const getPlaces = () => (dispatch) => {
+export const getPlaces = () => async (dispatch) => {
+  let token = await AsyncStorage.getItem('sp:auth:token');
+  console.log('AsyncStorage token in places.js', token);
+  let expiryDate = await AsyncStorage.getItem('sp:auth:expiryDate');
+  console.log('AsyncStorage expiryDate in places.js', expiryDate);
+
   dispatch(authGetToken())
     .then((token) => {
       return fetch('https://rn-course-v2.firebaseio.com/places.json?auth=' + token);
