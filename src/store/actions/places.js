@@ -53,9 +53,11 @@ export const addPlace = (placeName, location, image) => (dispatch) => {
 
 export const getPlaces = () => async (dispatch) => {
   let token = await AsyncStorage.getItem('sp:auth:token');
-  console.log('AsyncStorage token in places.js', token);
   let expiryDate = await AsyncStorage.getItem('sp:auth:expiryDate');
+  let refreshToken = await AsyncStorage.getItem('sp:auth:refreshToken');
+  console.log('AsyncStorage token in places.js', token);
   console.log('AsyncStorage expiryDate in places.js', expiryDate);
+  console.log('AsyncStorage refreshToken in places.js', refreshToken);
 
   dispatch(authGetToken())
     .then((token) => {

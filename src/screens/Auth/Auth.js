@@ -63,6 +63,8 @@ class AuthScreen extends Component {
   removeToken = async () => {
     try {
       await AsyncStorage.removeItem('sp:auth:token');
+      await AsyncStorage.removeItem('sp:auth:expiryDate');
+      await AsyncStorage.removeItem('sp:auth:refreshToken');
       console.log('token deleted!');
     } catch (error) {
       // Error retrieving data
