@@ -30,13 +30,20 @@ export const addPlace = (placeName, location, image, componentId) => (dispatch) 
       alert('Something went wrong, please try again!');
       dispatch(stopLoading());
     })
-    .then((res) => res.json())
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        throw new Error();
+      }
+    })
     .then((parsedRes) => {
       console.log('Image stored', parsedRes);
       const placeData = {
         name: placeName,
         location,
         image: parsedRes.imageUrl,
+        imagePath: parsedRes.imagePath,
       };
 
       // Firebase post API for places
@@ -45,7 +52,13 @@ export const addPlace = (placeName, location, image, componentId) => (dispatch) 
         body: JSON.stringify(placeData),
       });
     })
-    .then((res) => res.json())
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        throw new Error();
+      }
+    })
     .then((parsedRes) => {
       console.log('Data stored', parsedRes);
       dispatch(stopLoading());
@@ -78,17 +91,25 @@ export const getPlaces = () => async (dispatch) => {
     .catch(() => {
       alert('No valid token found!');
     })
-    .then((res) => res.json())
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        throw new Error();
+      }
+    })
     .then((parsedRes) => {
       const places = [];
-      for (let key in parsedRes) {
-        places.push({
-          ...parsedRes[key],
-          image: {
-            uri: parsedRes[key].image,
-          },
-          key,
-        });
+      if (parsedRes !== null) {
+        for (let key in parsedRes) {
+          places.push({
+            ...parsedRes[key],
+            image: {
+              uri: parsedRes[key].image,
+            },
+            key,
+          });
+        }
       }
       if (parsedRes.error) {
         alert(parsedRes.error);
@@ -97,7 +118,6 @@ export const getPlaces = () => async (dispatch) => {
     })
     .catch((err) => {
       console.log(err);
-      alert('Something went wrong, sorry :/');
     });
 };
 
@@ -121,7 +141,13 @@ export const deletePlace = (key) => (dispatch) => {
         method: 'DELETE',
       });
     })
-    .then((res) => res.json())
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        throw new Error();
+      }
+    })
     .then((parsedRes) => {
       console.log('Deleted successfully!');
     })
