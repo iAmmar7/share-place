@@ -125,8 +125,8 @@ class SharePlaceScreen extends Component {
       this.state.controls.image.value,
       this.props.componentId,
     );
-    this.resetState();
-    this.pickLocation.resetState();
+    // this.resetState();
+    // this.pickLocation.resetState();
   };
 
   render() {
@@ -168,19 +168,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  palceholder: {
-    borderWidth: 1,
-    borderColor: 'black',
-    backgroundColor: '#eee',
-    width: '80%',
-    height: 150,
-  },
   button: {
     margin: 8,
-  },
-  previewImage: {
-    width: '100%',
-    height: '100%',
   },
 });
 

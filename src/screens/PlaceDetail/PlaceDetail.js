@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   View,
+  ScrollView,
   Image,
   Text,
   Button,
@@ -17,21 +18,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { deletePlace } from '../../store/actions/index';
 
 function PlaceDetail(props) {
-  const [viewMode, setViewMode] = useState('portrait');
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    Dimensions.addEventListener('change', updateStyles);
-
-    return () => {
-      Dimensions.removeEventListener('change', updateStyles);
-    };
-  }, [viewMode]);
-
-  const updateStyles = (dims) => {
-    setViewMode(dims.window.height > 500 ? 'portrait' : 'landscape');
-  };
-
   const placeDeletedHandler = () => {
     dispatch(deletePlace(props.selectedPlace.key));
 
@@ -39,45 +25,47 @@ function PlaceDetail(props) {
   };
 
   return (
-    <View
-      style={[
-        styles.container,
-        viewMode === 'portrait' ? styles.portraitContainer : styles.landscapeContainer,
-      ]}>
-      <View style={styles.placeDetailContainer}>
-        <View style={styles.subContainer}>
-          <Image source={props.selectedPlace.image} style={styles.placeImage} />
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.section}>
+          <View style={[styles.subContainer, styles.imageContainer]}>
+            <Image source={props.selectedPlace.image} style={styles.placeImage} />
+          </View>
         </View>
-        <View style={styles.subContainer}>
-          <MapView
-            initialRegion={{
-              ...props.selectedPlace.location,
-              latitudeDelta: 0.0122,
-              longitudeDelta:
-                (Dimensions.get('window').width / Dimensions.get('window').height) * 0.0122,
-            }}
-            style={styles.map}>
-            <MapView.Marker coordinate={props.selectedPlace.location} />
-          </MapView>
+        <View style={styles.section}>
+          <View style={[styles.subContainer, styles.mapContainer]}>
+            <MapView
+              initialRegion={{
+                ...props.selectedPlace.location,
+                latitudeDelta: 0.0122,
+                longitudeDelta:
+                  (Dimensions.get('window').width / Dimensions.get('window').height) * 0.0122,
+              }}
+              style={styles.map}>
+              <MapView.Marker coordinate={props.selectedPlace.location} />
+            </MapView>
+          </View>
         </View>
-      </View>
-      <View style={styles.subContainer}>
-        <View>
-          <Text style={styles.placeName}>{props.selectedPlace.name}</Text>
-        </View>
-        <View>
-          <TouchableOpacity onPress={placeDeletedHandler}>
-            <View style={styles.deleteButton}>
-              <Icon
-                size={30}
-                name={Platform.OS === 'android' ? 'md-trash' : 'ios-trash'}
-                color='red'
-              />
+        <View style={styles.section}>
+          <View style={styles.subContainer}>
+            <View>
+              <Text style={styles.placeName}>{props.selectedPlace.name}</Text>
             </View>
-          </TouchableOpacity>
+            <View>
+              <TouchableOpacity onPress={placeDeletedHandler}>
+                <View style={styles.deleteButton}>
+                  <Icon
+                    size={30}
+                    name={Platform.OS === 'android' ? 'md-trash' : 'ios-trash'}
+                    color='red'
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -86,14 +74,19 @@ const styles = StyleSheet.create({
     margin: 22,
     flex: 1,
   },
-  portraitContainer: {
-    flexDirection: 'column',
+  section: {
+    width: '100%',
+    alignItems: 'center',
   },
-  landscapeContainer: {
-    flexDirection: 'row',
+  subContainer: {
+    width: '100%',
   },
-  placeDetailContainer: {
-    flex: 2,
+  imageContainer: {
+    height: 200,
+    marginBottom: 20,
+  },
+  mapContainer: {
+    height: 280,
   },
   placeImage: {
     width: '100%',
@@ -109,9 +102,6 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
     alignItems: 'center',
-  },
-  subContainer: {
-    flex: 1,
   },
 });
 
