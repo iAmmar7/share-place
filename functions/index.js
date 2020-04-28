@@ -73,7 +73,7 @@ exports.storeImage = functions.https.onRequest((request, response) => {
                   encodeURIComponent(file.name) +
                   "?alt=media&token=" +
                   uuid,
-                imagePath: "/places/" + uuid + ".jpg",
+                imagePath: "places/" + uuid + ".jpg",
               });
             } else {
               console.log(err);
@@ -90,9 +90,10 @@ exports.storeImage = functions.https.onRequest((request, response) => {
 });
 
 exports.deleteImage = functions.database
-  .ref("/places/{placeId}")
+  .ref("places/{placeId}")
   .onDelete((event) => {
-    const placeData = event.data.previous.val();
+    console.log("Data", event._data);
+    const placeData = event._data;
     const imagePath = placeData.imagePath;
 
     console.log("Database trigger run!");
