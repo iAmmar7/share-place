@@ -33,6 +33,7 @@ class SharePlaceScreen extends Component {
           valid: false,
         },
       },
+      reset: false,
     };
     Navigation.events().bindComponent(this);
   }
@@ -48,6 +49,30 @@ class SharePlaceScreen extends Component {
       });
     }
   }
+
+  resetState = () => {
+    this.setState({
+      reset: true,
+      controls: {
+        placeName: {
+          value: '',
+          valid: false,
+          touched: false,
+          validationRules: {
+            notEmpty: true,
+          },
+        },
+        location: {
+          value: null,
+          valid: false,
+        },
+        image: {
+          value: null,
+          valid: false,
+        },
+      },
+    });
+  };
 
   imagePickedHandler = (image) => {
     this.setState((prevState) => {
@@ -93,27 +118,34 @@ class SharePlaceScreen extends Component {
     });
   };
 
-  placeAddedHandler = () => {
+  placeAddedHandler = async () => {
     this.props.addPlace(
       this.state.controls.placeName.value,
       this.state.controls.location.value,
       this.state.controls.image.value,
+      this.props.componentId,
     );
+    this.resetState();
+    this.pickLocation.resetState();
   };
 
   render() {
+    const {
+      reset,
+      controls: { placeName, location, image },
+    } = this.state;
     return (
       <ScrollView>
         <View style={styles.container}>
           <MainText>
             <HeadingText>Share a place with us!</HeadingText>
           </MainText>
-          <PickImage onImagePicked={this.imagePickedHandler} />
-          <PickLocation onLocationPick={this.locationPickedHandler} />
-          <PlaceInput
-            placeData={this.state.controls.placeName}
-            onChangeText={this.placeNameChangedHandler}
+          <PickImage onImagePicked={this.imagePickedHandler} reset={reset} />
+          <PickLocation
+            onLocationPick={this.locationPickedHandler}
+            ref={(ref) => (this.pickLocation = ref)}
           />
+          <PlaceInput placeData={placeName} onChangeText={this.placeNameChangedHandler} />
           <View style={styles.button}>
             {this.props.isLoading ? (
               <ActivityIndicator size='large' color='orange' />
@@ -121,11 +153,7 @@ class SharePlaceScreen extends Component {
               <Button
                 title='Share the Place!'
                 onPress={this.placeAddedHandler}
-                disabled={
-                  !this.state.controls.placeName.valid ||
-                  !this.state.controls.location.valid ||
-                  !this.state.controls.image.valid
-                }
+                disabled={!placeName.valid || !location.valid || !image.valid}
               />
             )}
           </View>

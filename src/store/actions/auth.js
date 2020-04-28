@@ -14,6 +14,7 @@ export const tryAuth = (authData, authMode) => (dispatch) => {
       'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAFclyu6KyHV389sr7-Q01p0bRT0GB9x1A';
   }
 
+  // Firebase auth API for SignUp or LogIn
   fetch(url, {
     method: 'POST',
     body: JSON.stringify({
@@ -46,7 +47,6 @@ export const authStoreToken = (token, expiresIn, refreshToken) => async (dispatc
   dispatch(authSetToken(token));
   const now = new Date();
   const expiryDate = now.getTime() + expiresIn * 1000;
-  console.log(now, new Date(expiryDate));
   try {
     await AsyncStorage.setItem('sp:auth:token', token);
     await AsyncStorage.setItem('sp:auth:expiryDate', expiryDate.toString());
@@ -83,6 +83,7 @@ export const authGetToken = () => (dispatch, getState) => {
             } else {
               const refreshTokenFromStorage = await AsyncStorage.getItem('sp:auth:refreshToken');
               if (refreshTokenFromStorage !== null) {
+                // Firebase Refresh token with idToken API
                 fetch(
                   'https://securetoken.googleapis.com/v1/token?key=AIzaSyAFclyu6KyHV389sr7-Q01p0bRT0GB9x1A',
                   {

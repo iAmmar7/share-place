@@ -1,8 +1,10 @@
+import AsyncStorage from '@react-native-community/async-storage';
+import { Navigation } from 'react-native-navigation';
+
 import { SET_PLACES, REMOVE_PLACE } from './actionTypes';
 import { startLoading, stopLoading, authGetToken } from './index';
-import AsyncStorage from '@react-native-community/async-storage';
 
-export const addPlace = (placeName, location, image) => (dispatch) => {
+export const addPlace = (placeName, location, image, componentId) => (dispatch) => {
   let authToken;
   dispatch(startLoading());
   dispatch(authGetToken())
@@ -11,6 +13,8 @@ export const addPlace = (placeName, location, image) => (dispatch) => {
     })
     .then((token) => {
       authToken = token;
+
+      // Firebase Cloud Function for image store - created by me
       return fetch('https://us-central1-rn-course-v2.cloudfunctions.net/storeImage', {
         method: 'POST',
         headers: {
@@ -34,6 +38,8 @@ export const addPlace = (placeName, location, image) => (dispatch) => {
         location,
         image: parsedRes.imageUrl,
       };
+
+      // Firebase post API for places
       return fetch('https://rn-course-v2.firebaseio.com/places.json?auth=' + authToken, {
         method: 'POST',
         body: JSON.stringify(placeData),
@@ -43,6 +49,11 @@ export const addPlace = (placeName, location, image) => (dispatch) => {
     .then((parsedRes) => {
       console.log('Data stored', parsedRes);
       dispatch(stopLoading());
+      Navigation.mergeOptions(componentId, {
+        bottomTabs: {
+          currentTabIndex: 0,
+        },
+      });
     })
     .catch((err) => {
       console.log(err);
@@ -61,6 +72,7 @@ export const getPlaces = () => async (dispatch) => {
 
   dispatch(authGetToken())
     .then((token) => {
+      // Firebase get API for places
       return fetch('https://rn-course-v2.firebaseio.com/places.json?auth=' + token);
     })
     .catch(() => {
@@ -103,6 +115,8 @@ export const deletePlace = (key) => (dispatch) => {
     })
     .then((token) => {
       dispatch(removePlace(key));
+
+      // Firebase delete API for places
       return fetch('https://rn-course-v2.firebaseio.com/places/' + key + '.json?auth=' + token, {
         method: 'DELETE',
       });

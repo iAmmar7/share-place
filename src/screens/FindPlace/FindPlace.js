@@ -18,11 +18,13 @@ class FindPlaceScreen extends Component {
     Navigation.events().bindComponent(this);
   }
 
-  componentDidMount() {
+  // Navigation LifeCycle Method
+  componentDidAppear() {
     this.props.getPlaces();
   }
 
   navigationButtonPressed(event) {
+    console.log(event, event.id);
     if (event.buttonId === 'leftDrawerToggle') {
       Navigation.mergeOptions(this.props.componentId, {
         sideMenu: {
