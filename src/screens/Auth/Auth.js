@@ -183,7 +183,7 @@ class AuthScreen extends Component {
         <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
           <View style={styles.container}>
             {headingText}
-            <ButtonWithBackground color='#29aaf4' onPress={this.switchAuthModeHandler}>
+            <ButtonWithBackground color='orange' onPress={this.switchAuthModeHandler}>
               Switch to {authMode === 'login' ? 'Sign Up' : 'Login'}
             </ButtonWithBackground>
             <View style={styles.inputContainer}>
@@ -225,10 +225,10 @@ class AuthScreen extends Component {
               </View>
             </View>
             {this.props.isLoading ? (
-              <ActivityIndicator size='large' color='black' />
+              <ActivityIndicator size='large' color='orange' />
             ) : this.state.authMode === 'login' ? (
               <ButtonWithBackground
-                color='#29aaf4'
+                color='orange'
                 onPress={this.authHandler}
                 // disabled={
                 //   !email.valid ||
@@ -240,7 +240,7 @@ class AuthScreen extends Component {
               </ButtonWithBackground>
             ) : (
               <ButtonWithBackground
-                color='#29aaf4'
+                color='orange'
                 onPress={this.authHandler}
                 // disabled={
                 //   !email.valid ||

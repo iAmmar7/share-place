@@ -36,7 +36,7 @@ const SideDrawer = (props) => {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 50,
-    backgroundColor: 'white',
+    backgroundColor: '#0F111A',
     flex: 1,
   },
   drawerItem: {

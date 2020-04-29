@@ -1,5 +1,5 @@
 import React from 'react';
-import {TextInput, StyleSheet} from 'react-native';
+import { TextInput, StyleSheet } from 'react-native';
 
 // const defaultInput = props => <TextInput style={styles.input} {...props} />;
 
@@ -9,14 +9,11 @@ import {TextInput, StyleSheet} from 'react-native';
 // So to merge properties, we will use the following syntax.
 // We use array, this will merge props.style into this component style. So order is important.
 
-const defaultInput = props => (
+const defaultInput = (props) => (
   <TextInput
     {...props}
-    style={[
-      styles.input,
-      props.style,
-      !props.valid && props.touched ? styles.invalid : null,
-    ]}
+    style={[styles.input, props.style, !props.valid && props.touched ? styles.invalid : null]}
+    placeholderTextColor={'orange'}
   />
 );
 
@@ -24,10 +21,11 @@ const styles = StyleSheet.create({
   input: {
     width: '100%',
     borderWidth: 1,
-    borderColor: '#eee',
+    borderColor: 'orange',
     padding: 5,
     marginTop: 8,
     marginBottom: 8,
+    color: 'orange',
   },
   invalid: {
     backgroundColor: '#f9c0c0',

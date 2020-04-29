@@ -18,6 +18,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { deletePlace } from '../../store/actions/index';
 
 function PlaceDetail(props) {
+  const dispatch = useDispatch();
+
   const placeDeletedHandler = () => {
     dispatch(deletePlace(props.selectedPlace.key));
 
@@ -28,6 +30,9 @@ function PlaceDetail(props) {
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.section}>
+          <View>
+            <Text style={styles.placeName}>{props.selectedPlace.name}</Text>
+          </View>
           <View style={[styles.subContainer, styles.imageContainer]}>
             <Image source={props.selectedPlace.image} style={styles.placeImage} />
           </View>
@@ -48,20 +53,15 @@ function PlaceDetail(props) {
         </View>
         <View style={styles.section}>
           <View style={styles.subContainer}>
-            <View>
-              <Text style={styles.placeName}>{props.selectedPlace.name}</Text>
-            </View>
-            <View>
-              <TouchableOpacity onPress={placeDeletedHandler}>
-                <View style={styles.deleteButton}>
-                  <Icon
-                    size={30}
-                    name={Platform.OS === 'android' ? 'md-trash' : 'ios-trash'}
-                    color='red'
-                  />
-                </View>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity onPress={placeDeletedHandler}>
+              <View style={styles.deleteButton}>
+                <Icon
+                  size={30}
+                  name={Platform.OS === 'android' ? 'md-trash' : 'ios-trash'}
+                  color='orange'
+                />
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -71,11 +71,13 @@ function PlaceDetail(props) {
 
 const styles = StyleSheet.create({
   container: {
-    margin: 22,
+    backgroundColor: '#0F111A',
     flex: 1,
   },
   section: {
-    width: '100%',
+    width: '90%',
+    marginRight: 'auto',
+    marginLeft: 'auto',
     alignItems: 'center',
   },
   subContainer: {
@@ -96,12 +98,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     fontSize: 28,
+    color: '#fff',
   },
   map: {
     ...StyleSheet.absoluteFillObject,
   },
   deleteButton: {
     alignItems: 'center',
+    marginBottom: 10,
+    marginTop: 10,
   },
 });
 

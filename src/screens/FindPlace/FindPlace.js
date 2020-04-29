@@ -111,7 +111,11 @@ class FindPlaceScreen extends Component {
         </Animated.View>
       );
     }
-    return <View style={placesLoaded ? null : styles.buttonContainer}>{content}</View>;
+    return (
+      <View style={placesLoaded ? { backgroundColor: '#0F111A', flex: 1 } : styles.buttonContainer}>
+        {content}
+      </View>
+    );
   }
 }
 
@@ -120,6 +124,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#0F111A',
   },
   searchButton: {
     borderColor: 'orange',

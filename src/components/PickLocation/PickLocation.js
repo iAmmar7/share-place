@@ -3,6 +3,8 @@ import { View, Image, Button, StyleSheet, Text, Dimensions } from 'react-native'
 import MapView from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 
+import ButtonWithBackground from '../UI/ButtonWithBackground/ButtonWithBackground';
+
 class PickLocation extends Component {
   state = {
     focusedLocation: {
@@ -73,7 +75,7 @@ class PickLocation extends Component {
     let marker = null;
 
     if (this.state.locationChosen) {
-      marker = <MapView.Marker coordinate={this.state.focusedLocation} />;
+      marker = <MapView.Marker coordinate={this.state.focusedLocation} pinColor='orange' />;
     }
 
     return (
@@ -82,12 +84,15 @@ class PickLocation extends Component {
           initialRegion={this.state.focusedLocation}
           region={!this.state.location ? this.state.focusedLocation : null}
           style={styles.map}
+          loadingIndicatorColor='orange'
           onPress={this.pickLocationHandler}
           ref={(ref) => (this.map = ref)}>
           {marker}
         </MapView>
         <View style={styles.button}>
-          <Button title='Locate Me' onPress={this.getLocationHandler} />
+          <ButtonWithBackground color='orange' onPress={this.getLocationHandler}>
+            Locate Me
+          </ButtonWithBackground>
         </View>
       </View>
     );
@@ -104,7 +109,7 @@ const styles = StyleSheet.create({
     height: 250,
   },
   button: {
-    margin: 8,
+    margin: 10,
   },
 });
 

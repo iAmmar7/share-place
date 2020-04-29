@@ -39,12 +39,18 @@ const startTabs = () => {
                         // icon: require('../images/one.png'),
                         testID: 'FIRST_TAB_BAR_BUTTON',
                         selectedIconColor: 'orange',
+                        selectedTextColor: 'orange',
                       },
                       topBar: {
                         leftButtonColor: 'orange',
                         title: {
                           text: 'Find Place',
                           alignment: 'center',
+                          color: 'orange',
+                        },
+                        background: {
+                          color: '#0F111A',
+                          translucent: false,
                         },
                         leftButtons: [
                           {
@@ -75,11 +81,18 @@ const startTabs = () => {
                         // icon: require('../images/two.png'),
                         testID: 'SECOND_TAB_BAR_BUTTON',
                         selectedIconColor: 'orange',
+                        backgroundColor: '#0F111A',
                       },
                       topBar: {
                         leftButtonColor: 'orange',
                         title: {
                           text: 'Share Place',
+                          alignment: 'center',
+                          color: 'orange',
+                        },
+                        background: {
+                          color: '#0F111A',
+                          translucent: false,
                         },
                         leftButtons: [
                           {

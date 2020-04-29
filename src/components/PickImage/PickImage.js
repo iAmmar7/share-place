@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Image, Button, StyleSheet } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 
+import ButtonWithBackground from '../UI/ButtonWithBackground/ButtonWithBackground';
+
 function PickImage(props) {
   const [pickedImage, setPickedImage] = useState(null);
 
@@ -33,7 +35,9 @@ function PickImage(props) {
         <Image source={pickedImage} style={styles.previewImage} />
       </View>
       <View style={styles.button}>
-        <Button title='Pick Image' onPress={pickImageHandler} />
+        <ButtonWithBackground color='orange' onPress={pickImageHandler}>
+          Pick Image
+        </ButtonWithBackground>
       </View>
     </View>
   );
@@ -45,14 +49,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   placeholder: {
-    borderWidth: 1,
-    borderColor: 'black',
-    backgroundColor: '#eee',
+    backgroundColor: '#30210f',
     width: '80%',
     height: 150,
   },
   button: {
-    margin: 8,
+    margin: 10,
   },
   previewImage: {
     width: '100%',

@@ -7,6 +7,7 @@ import { addPlace } from '../../store/actions/index';
 import PlaceInput from '../../components/PlaceInput/PlaceInput';
 import MainText from '../../components/UI/MainText/MainText';
 import HeadingText from '../../components/UI/HeadingText/HeadingText';
+import ButtonWithBackground from '../../components/UI/ButtonWithBackground/ButtonWithBackground';
 import PickImage from '../../components/PickImage/PickImage';
 import PickLocation from '../../components/PickLocation/PickLocation';
 import validate from '../../utility/validation';
@@ -137,8 +138,8 @@ class SharePlaceScreen extends Component {
     return (
       <ScrollView>
         <View style={styles.container}>
-          <MainText>
-            <HeadingText>Share a place with us!</HeadingText>
+          <MainText style={{ marginBottom: 10 }}>
+            <HeadingText style={{ color: 'orange' }}>Share a place with us!</HeadingText>
           </MainText>
           <PickImage onImagePicked={this.imagePickedHandler} reset={reset} />
           <PickLocation
@@ -150,11 +151,12 @@ class SharePlaceScreen extends Component {
             {this.props.isLoading ? (
               <ActivityIndicator size='large' color='orange' />
             ) : (
-              <Button
-                title='Share the Place!'
+              <ButtonWithBackground
+                color='orange'
                 onPress={this.placeAddedHandler}
-                disabled={!placeName.valid || !location.valid || !image.valid}
-              />
+                disabled={!placeName.valid || !location.valid || !image.valid}>
+                Share the Place!
+              </ButtonWithBackground>
             )}
           </View>
         </View>
@@ -167,6 +169,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    backgroundColor: '#0F111A',
   },
   button: {
     margin: 8,
